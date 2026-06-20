@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { addItem, removeItem } from './CartSlice';
 import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
@@ -8,9 +9,9 @@ const CartItem = ({ onContinueShopping }) => {
   const dispatch = useDispatch();
 
   // Calculate total amount for all products in the cart
-  const calculateTotalAmount = (cartArray) => {
+  const calculateTotalAmount = () => {
     let total = 0;
-    cartArray.forEach(item => {
+    cart.forEach(item => {
         const quantity = item.quantity;
         const cost = item.cost;
 
@@ -35,7 +36,7 @@ const CartItem = ({ onContinueShopping }) => {
     if (item.quantity > 1) {
         dispatch(updateQuantity({name: item.name, quantity: item.quantity - 1}))
     } else {
-        dispatch(removeItem({type: item.type}))
+        dispatch(removeItem({name: item.name}))
     }
   };
 
@@ -45,14 +46,13 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-    let subTotal = 0;
     const quantity = item.quantity;
     const cost = item.cost;
 
     const numericCost = parseFloat(cost.substring(1));
-    const total = quantity * numericCost;
+    const subTotal = quantity * numericCost;
 
-    subTotal = total
+    return subTotal;
   };
 
   return (
